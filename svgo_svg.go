@@ -5,13 +5,15 @@ import (
 	"io/ioutil"
 )
 
+// Main SVG parent element <svg></svg>
 type SVG struct {
-	Width      int32
-	Height     int32
-	Children   []SVGElement
-	Attributes map[string]string
+	Width      int32             // SVG Viewbox Width
+	Height     int32             // SVG Viewbox Height
+	Children   []SVGElement      // List of SVG child elements
+	Attributes map[string]string // SVG element's attributes
 }
 
+// Save SVG element to file as text
 func (svg SVG) ToFile(path string) error {
 	svgString := svg.ToString()
 	svgBytes := []byte(svgString)
@@ -19,6 +21,7 @@ func (svg SVG) ToFile(path string) error {
 	return err
 }
 
+// Convert SVG element to a string
 func (svg SVG) ToString() string {
 	sattrs := formatAttributes(svg.Attributes)
 	schildren := ""
@@ -29,27 +32,41 @@ func (svg SVG) ToString() string {
 		svg.Width, svg.Height, sattrs, schildren)
 }
 
+// Add an SVGElement as a child of svg
 func (svg *SVG) AddChild(child SVGElement) {
 	svg.Children = append(svg.Children, child)
 }
 
+// Initialize the svg element's attributes map
+// if it isn't already initialized
 func (svg *SVG) initAttributes() {
 	if svg.Attributes == nil {
 		svg.Attributes = make(map[string]string)
 	}
 }
 
-func (svg *SVG) GetAttr(key string) (string, bool) {
+// Get an attribute from svg's attributes
+func (svg *SVG) GetAttr(key string) string {
 	svg.initAttributes()
-	val, inAttrs := svg.Attributes[key]
-	return val, inAttrs
+	val := svg.Attributes[key]
+	return val
 }
 
+// Check if the svg element has attribute `key`
+func (svg *SVG) HasAttr(key string) bool {
+	svg.initAttributes()
+	_, has := svg.Attributes[key]
+	return has
+}
+
+// Set svg element's attribute `key` to `value`
 func (svg *SVG) SetAttr(key string, value string) {
 	svg.initAttributes()
 	svg.Attributes[key] = value
 }
 
+// Delete attribute `key` from svg's elements
+// if it exists
 func (svg *SVG) DelAttr(key string) {
 	svg.initAttributes()
 	delete(svg.Attributes, key)

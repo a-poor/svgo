@@ -37,4 +37,3 @@ func (l *Line) DelAttr(key string) {
 	l.initAttributes()
 	delete(l.Attributes, key)
 }
-

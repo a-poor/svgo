@@ -37,4 +37,3 @@ func (e *Ellipse) DelAttr(key string) {
 	e.initAttributes()
 	delete(e.Attributes, key)
 }
-
