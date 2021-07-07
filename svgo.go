@@ -1,27 +1,33 @@
-package main
+package svgo
 
 import (
 	"fmt"
+	"strings"
 )
 
-func main() {
-	test_path := "./test.svg"
-	svg := SVG{Width: 400, Height: 600}
-	fmt.Println(svg.ToString())
+type SVGElement interface {
+	ToString() string
+	//GetAttr(key string) string
+	//SetAttr(key string, value string) string
+	//DelAttr(key string) string
+}
 
-	svg.SetAttr("width", "300")
+type SVGParent interface {
+	AddChild(c SVGElement)
+}
 
-	circle := Circle{Cx: 100, Cy: 300, R: 50}
-	fmt.Println(circle.ToString())
+type Point2D struct {
+	X, Y float64
+}
 
-	circle.SetAttr("fill", "green")
+func (p Point2D) ToString() string {
+	return fmt.Sprintf("%f,%f", p.X, p.Y)
+}
 
-	svg.AddChild(circle)
-
-	fmt.Println(svg.ToString())
-
-	err := svg.ToFile(test_path)
-	if err != nil {
-		panic(err)
+func formatAttributes(attrs map[string]string) string {
+	var sattrs string
+	for k, v := range attrs {
+		sattrs += fmt.Sprintf("%s=\"%s\" ", k, v)
 	}
+	return strings.TrimSpace(sattrs)
 }
