@@ -1,4 +1,4 @@
-package svgo
+package main
 
 import "testing"
 
@@ -7,4 +7,3 @@ func TestPlaceholder(t *testing.T) {
 		t.Error("If this failed, something is really wrong!")
 	}
 }
-
