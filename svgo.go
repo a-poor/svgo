@@ -141,7 +141,6 @@ func (p Polygon) toString() string {
 }
 
 
-
 func (svg SVG) addChild(child SVGElement) {
 	svg.children = append(svg.children, child)
 }
