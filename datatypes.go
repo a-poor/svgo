@@ -9,60 +9,60 @@ type SVGParent interface {
 }
 
 type Point2D struct {
-	x, y float64
+	X, Y float64
 }
 
 type SVG struct {
-	width      int32
-	height     int32
-	children   []SVGElement
-	attributes map[string]string
+	Width      int32
+	Height     int32
+	Children   []SVGElement
+	Attributes map[string]string
 }
 
 type Group struct {
-	attributes map[string]string
-	children   []SVGElement
+	Attributes map[string]string
+	Children   []SVGElement
 }
 
 type Circle struct {
-	cx         float64
-	cy         float64
-	r          float64
-	attributes map[string]string
+	Cx         float64
+	Cy         float64
+	R          float64
+	Attributes map[string]string
 }
 
 type Ellipse struct {
-	cx         float64
-	cy         float64
-	rx         float64
-	ry         float64
-	attributes map[string]string
+	Cx         float64
+	Cy         float64
+	Rx         float64
+	Ry         float64
+	Attributes map[string]string
 }
 
 type Rect struct {
-	x          float64
-	y          float64
-	width      float64
-	height     float64
-	attributes map[string]string
+	X          float64
+	Y          float64
+	Width      float64
+	Height     float64
+	Attributes map[string]string
 }
 
 type Line struct {
-	x1         float64
-	y1         float64
-	x2         float64
-	y2         float64
-	attributes map[string]string
+	X1         float64
+	Y1         float64
+	X2         float64
+	Y2         float64
+	Attributes map[string]string
 }
 
 type Text struct {
-	text       string
-	x          float64
-	y          float64
-	attributes map[string]string
+	Text       string
+	X          float64
+	Y          float64
+	Attributes map[string]string
 }
 
 type Polygon struct {
-	attributes map[string]string
-	points     []Point2D
+	Attributes map[string]string
+	Points     []Point2D
 }

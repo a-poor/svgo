@@ -2,61 +2,69 @@ package svgo
 
 import (
 	"fmt"
+	"io/ioutil"
 	"strings"
 )
 
+func (svg SVG) ToFile(path string) error {
+	svgString := svg.ToString()
+	svgBytes := []byte(svgString)
+	err := ioutil.WriteFile(path, svgBytes, 0644)
+	return err
+}
+
 func (svg SVG) ToString() string {
-	sattrs := formatAttributes(svg.attributes)
+	sattrs := formatAttributes(svg.Attributes)
 	schildren := ""
-	for _, c := range svg.children {
+	for _, c := range svg.Children {
 		schildren += c.ToString()
 	}
 	return fmt.Sprintf("<svg viewbox=\"0 0 %d %d\" xmlns=\"http://www.w3.org/2000/svg\" %s>%s</svg>",
-		svg.width, svg.height, sattrs, schildren)
+		svg.Width, svg.Height, sattrs, schildren)
 }
 
 func (g Group) ToString() string {
-	sattrs := formatAttributes(g.attributes)
+	sattrs := formatAttributes(g.Attributes)
 	schildren := ""
-	for _, c := range g.children {
+	for _, c := range g.Children {
 		schildren += c.ToString()
 	}
 	return fmt.Sprintf("<g %s>%s</g>", sattrs, schildren)
 }
 
 func (c Circle) ToString() string {
-	sattrs := formatAttributes(c.attributes)
-	return fmt.Sprintf("<circle cx=\"%f\" cy=\"%f\" r=\"%f\" %s />", c.cx, c.cy, c.r, sattrs)
+	sattrs := formatAttributes(c.Attributes)
+	return fmt.Sprintf("<circle cx=\"%f\" cy=\"%f\" r=\"%f\" %s />", c.Cx, c.Cy, c.R, sattrs)
 }
 
 func (e Ellipse) ToString() string {
-	sattrs := formatAttributes(e.attributes)
+	sattrs := formatAttributes(e.Attributes)
 	return fmt.Sprintf("<ellipse cx=\"%f\" cy=\"%f\" rx=\"%f\" rx=\"%f\" %s />",
-		e.cx, e.cy, e.rx, e.ry, sattrs)
+		e.Cx, e.Cy, e.Rx, e.Ry, sattrs)
 }
 
 func (r Rect) ToString() string {
-	sattrs := formatAttributes(r.attributes)
+	sattrs := formatAttributes(r.Attributes)
 	return fmt.Sprintf("<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" %s />",
-		r.x, r.y, r.width, r.height, sattrs)
+		r.X, r.Y, r.Width, r.Height, sattrs)
 }
 
 func (l Line) ToString() string {
-	sattrs := formatAttributes(l.attributes)
+	sattrs := formatAttributes(l.Attributes)
 	return fmt.Sprintf("<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" %s />",
-		l.x1, l.y1, l.x2, l.y2, sattrs)
+		l.X1, l.Y1, l.X2, l.Y2, sattrs)
 }
 
 func (t Text) ToString() string {
-	sattrs := formatAttributes(t.attributes)
+	sattrs := formatAttributes(t.Attributes)
 	return fmt.Sprintf("<text x=\"%f\" y=\"%f\" %s>%s</text>",
-		t.x, t.y, sattrs, t.text)
+		t.X, t.Y, sattrs, t.Text)
 }
 
 func (p Polygon) ToString() string {
-	sattrs := formatAttributes(p.attributes)
+	sattrs := formatAttributes(p.Attributes)
 	points := make([]string, 0)
-	for _, pt := range p.points {
+	for _, pt := range p.Points {
 		points = append(points, pt.ToString())
 	}
 	spoints := strings.Join(points, " ")
@@ -64,19 +72,19 @@ func (p Polygon) ToString() string {
 }
 
 func (p Point2D) ToString() string {
-	return fmt.Sprintf("%f,%f", p.x, p.y)
+	return fmt.Sprintf("%f,%f", p.X, p.Y)
 }
 
 func (svg SVG) AddChild(child SVGElement) {
-	svg.children = append(svg.children, child)
+	svg.Children = append(svg.Children, child)
 }
 
 func (g Group) AddChild(child SVGElement) {
-	g.children = append(g.children, child)
+	g.Children = append(g.Children, child)
 }
 
 func (pg Polygon) AddPoint2D(p Point2D) {
-	pg.points = append(pg.points, p)
+	pg.Points = append(pg.Points, p)
 }
 
 func (pg Polygon) AddPoint(x, y float64) {
