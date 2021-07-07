@@ -1,1 +1,1 @@
-module "svgo"
+module "github.com/a-poor/svgo"

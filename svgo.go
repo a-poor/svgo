@@ -69,8 +69,10 @@ type Line struct {
 }
 
 type Text struct {
-	attributes map[string]string
 	text string
+	x float64
+	y float64
+	attributes map[string]string
 }
 
 type Polygon struct {
@@ -100,23 +102,62 @@ func (g Group) toString() string {
 }
 
 func (c Circle) toString() string {
-	return fmt.Sprintf("<circle cx=\"%f\" cy=\"%f\" r=\"%f\" />", c.cx, c.cy, c.r)
+	sattrs := formatAttributes(c.attributes)
+	return fmt.Sprintf("<circle cx=\"%f\" cy=\"%f\" r=\"%f\" %s />", c.cx, c.cy, c.r, sattrs)
 }
 
 func (e Ellipse) toString() string {
-	return fmt.Sprintf("<ellipse cx=\"%f\" cy=\"%f\" rx=\"%f\" rx=\"%f\" />", e.cx, e.cy, e.rx, e.ry)
+	sattrs := formatAttributes(e.attributes)
+	return fmt.Sprintf("<ellipse cx=\"%f\" cy=\"%f\" rx=\"%f\" rx=\"%f\" %s />",
+		e.cx, e.cy, e.rx, e.ry, sattrs)
 }
 
 func (r Rect) toString() string {
-	return fmt.Sprintf("<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" />", r.x, r.y, r.width, r.height)
+	sattrs := formatAttributes(r.attributes)
+	return fmt.Sprintf("<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" %s />",
+		r.x, r.y, r.width, r.height, sattrs)
 }
 
 func (l Line) toString() string {
-	return fmt.Sprintf("<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />", l.x1, l.y1, l.x2, l.y2)
+	sattrs := formatAttributes(l.attributes)
+	return fmt.Sprintf("<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" %s />",
+		l.x1, l.y1, l.x2, l.y2, sattrs)
+}
+
+func (t Text) toString() string {
+	sattrs := formatAttributes(t.attributes)
+	return fmt.Sprintf("<text x=\"%s\" y=\"%\" %s>%s</text>",
+		t.x, t.y, sattrs, t.text)
+}
+
+func (p Polygon) toString() string {
+	sattrs := formatAttributes(p.attributes)
+	points := make([]string, 0)
+	for _, p := range p.points {
+		points = append(points, fmt.Sprintf("%f,%f", p.x, p.y))
+	}
+	spoints := strings.Join(points, " ")
+	return fmt.Sprintf("<polygon points=\"%s\" %s/>", spoints, sattrs)
 }
 
 
 
+func (svg SVG) addChild(child SVGElement) {
+	svg.children = append(svg.children, child)
+}
+
+func (g Group) addChild(child SVGElement) {
+	g.children = append(g.children, child)
+}
+
+
+func (pg Polygon) addPoint2D(p Point2D) {
+	pg.points = append(pg.points, p)
+}
+
+func (pg Polygon) addPoint(x, y float64) {
+	pg.addPoint2D(Point2D{x, y})
+}
 
 func formatAttributes(attrs map[string]string) string {
 	var sattrs string
