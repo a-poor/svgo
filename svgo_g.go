@@ -2,6 +2,9 @@ package svgo
 
 import "fmt"
 
+// An svg `<g></g>` (group) element.
+// Used for grouping together other elements
+// into logical collections or for shared typing.
 type Group struct {
 	Attributes map[string]string
 	Children   []SVGElement
